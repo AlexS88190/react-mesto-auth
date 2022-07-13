@@ -1,0 +1,8 @@
+.register__inout-button {
+    transition: opacity 0.5s ease;
+}
+
+.register__inout-button:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
