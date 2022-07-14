@@ -50,7 +50,7 @@
 @import url(./blocks/register/__form/register__form.css);
 @import url(./blocks/register/__input/register__input.css);
 @import url(./blocks/register/__inout/register__inout.css);
-@import url(./blocks/register/__inout-button/register__inout-button.css);
+@import url(./blocks/register/__inout-link/register__inout-link.css);
 @import url(./blocks/register/__save-button/register__save-button.css);
 @import url(./blocks/infotooltip/infotooltip.css);
 @import url(./blocks/infotooltip/_opened/infotooltip_opened.css);
