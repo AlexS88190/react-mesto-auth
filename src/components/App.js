@@ -1,6 +1,4 @@
 import React from 'react';
-
-import Header from "./Header.js";
 import Register from "./Register.js";
 import Login from "./Login.js";
 import Main from "./Main.js";
@@ -32,6 +30,15 @@ function App() {
 
     const[loggedIn, setLoggedIn] = React.useState(false);
 
+    const [dataMessage, setDataMessage] = React.useState(
+        {
+            popupMessage: null,
+            // picture: null,
+            messageSuccess: 'Вы успешно зарегистрировались!',
+            messageError: 'Что-то пошло не так! Попробуйте еще раз.'
+        }
+    );
+
     const navigate = useNavigate();
 
 
@@ -42,15 +49,16 @@ function App() {
 
         api.getUserInfo()
             .then(res => setCurrentUser(res))
-            .catch(error => console.log(error))
+            .catch(error => console.log(error));
+
+        tokenCheck();
+
     }, [])
 
-
     React.useEffect(() => {
-         tokenCheck();
-         if (loggedIn) {
-             navigate('/');
-         }
+        if (loggedIn) {
+            navigate('/');
+        }
     }, [loggedIn])
 
     function handleCardLike(card) {
@@ -130,13 +138,25 @@ function App() {
                 if (data.token) {
                     localStorage.setItem('jwt', data.token);
                     setLoggedIn(true);
+                    setDataMessage((oldDataMessage) => ({
+                        ...oldDataMessage,
+                        popupMessage: true
+                    }));
+                    setUserLogin(email);
                 }
             })
-            .catch(err => console.error(err))
+            .catch((err) => {
+                setDataMessage((oldDataMessage) => ({
+                    ...oldDataMessage,
+                    popupMessage: false
+                }));
+                console.error(err)
+            })
     }
 
     function tokenCheck() {
         let jwt = localStorage.getItem('jwt');
+
         if (jwt) {
             mestoAuth.getContent(jwt)
                 .then(res => {
@@ -155,18 +175,15 @@ function App() {
         setLoggedIn(false);
         navigate('/sign-in');
     }
-    console.log(loggedIn)
-    console.log(userLogin)
 
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
                 <div className="page__content">
-                    <Header handleLogout={handleLogout}/>
 
                     <Routes>
 
-                        <Route path='/sign-up' element={<Register handleRegister={handleRegister}/>}/>
+                        <Route path='/sign-up' element={<Register handleRegister={handleRegister} />}/>
 
                         <Route path='/sign-in' element={<Login handleLogin={handleLogin}/>}/>
 
@@ -182,6 +199,9 @@ function App() {
                                         cards={cards}
                                         onCardLike={handleCardLike}
                                         onCardDelete={handleCardDelete}
+                                        handleLogout={handleLogout}
+                                        loggedIn={loggedIn}
+                                        userLogin={userLogin}
                                     />
                                 </ProtectedRoute>
                             }
@@ -193,7 +213,6 @@ function App() {
                     </Routes>
                     <Footer/>
                 </div>
-
 
 
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
@@ -214,7 +233,7 @@ function App() {
 
                 <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
 
-                <InfoTooltip />
+                <InfoTooltip loggedIn={loggedIn} dataMessage={dataMessage} />
 
             </CurrentUserContext.Provider>
         </div>

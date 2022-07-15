@@ -1,11 +1,19 @@
 import React from 'react';
+import Header from "./Header.js";
 
-function Login({handleLogin}) {
+function Login({ handleLogin }) {
 
     const [data, setData] = React.useState(
         {
             email: '',
             password: ''
+        }
+    );
+
+    const [mapSignInSignOut, setMapSignInSignOut] = React.useState(
+        {
+            titleInOut: 'Регистрация',
+            pathRedirect: '/sign-up'
         }
     );
 
@@ -32,14 +40,17 @@ function Login({handleLogin}) {
 
 
     return (
-        <div className="register">
-            <h1 className="register__title">Вход</h1>
-            <form className="register__form" onSubmit={handleSubmit}>
-                <input name="email" className="register__input" value={data.email} onChange={handleChange}  placeholder="Email" type="email"/>
-                <input name="password" className="register__input" value={data.password} onChange={handleChange} placeholder="Пароль" type="password"/>
-                <button className="register__save-button" type="submit">Войти</button>
-            </form>
-       </div>
+        <>
+            <Header mapSignInSignOut={mapSignInSignOut} />
+            <div className="register">
+                <h1 className="register__title">Вход</h1>
+                <form className="register__form" onSubmit={handleSubmit}>
+                    <input name="email" className="register__input" value={data.email} onChange={handleChange}  placeholder="Email" type="email"/>
+                    <input name="password" className="register__input" value={data.password} onChange={handleChange} placeholder="Пароль" type="password"/>
+                    <button className="register__save-button" type="submit">Войти</button>
+                </form>
+           </div>
+        </>
 
     )
 }
