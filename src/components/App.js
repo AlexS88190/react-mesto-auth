@@ -37,7 +37,6 @@ function App() {
 
     const navigate = useNavigate();
 
-
     React.useEffect(() => {
         api.getCards()
             .then(res => setCards(res))
@@ -221,12 +220,9 @@ function App() {
 
                         <Route path='*'
                                element={loggedIn ? <Navigate to='/'/> : <Navigate to='/sign-in' />}/>
-
                     </Routes>
                     <Footer/>
                 </div>
-
-
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
                                   onUpdateUser={handleUpdateUser}/>
 
