@@ -17,8 +17,6 @@ function Login({ handleLogin }) {
         }
     );
 
-    const [message, setMessage] = React.useState('');
-
     function handleChange(event) {
 
         const {name, value} = event.target;
@@ -37,7 +35,6 @@ function Login({ handleLogin }) {
         }
         handleLogin(email, password);
     }
-
 
     return (
         <>

@@ -21,19 +21,15 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState(null);
-
     const [currentUser, setCurrentUser] = React.useState({});
-
     const [cards, setCards] = React.useState([]);
 
     const [userLogin, setUserLogin] = React.useState('');
-
     const[loggedIn, setLoggedIn] = React.useState(false);
-
     const [dataMessage, setDataMessage] = React.useState(
         {
             popupMessage: null,
-            // picture: null,
+            pictureAlert: null,
             messageSuccess: 'Вы успешно зарегистрировались!',
             messageError: 'Что-то пошло не так! Попробуйте еще раз.'
         }
@@ -127,9 +123,21 @@ function App() {
     function handleRegister(email, password) {
         mestoAuth.register(password, email)
             .then(() => {
+                setDataMessage((oldDataMessage) => ({
+                    ...oldDataMessage,
+                    popupMessage: true,
+                    pictureAlert: true
+                }));
                 navigate('/sign-in')
             })
-            .catch(err => console.error(err))
+            .catch((err) => {
+                setDataMessage((oldDataMessage) => ({
+                    ...oldDataMessage,
+                    popupMessage: false,
+                    pictureAlert: false
+                }));
+                console.error(err)
+            })
     }
 
     function handleLogin(email, password) {
@@ -138,17 +146,14 @@ function App() {
                 if (data.token) {
                     localStorage.setItem('jwt', data.token);
                     setLoggedIn(true);
-                    setDataMessage((oldDataMessage) => ({
-                        ...oldDataMessage,
-                        popupMessage: true
-                    }));
                     setUserLogin(email);
                 }
             })
             .catch((err) => {
                 setDataMessage((oldDataMessage) => ({
                     ...oldDataMessage,
-                    popupMessage: false
+                    popupMessage: false,
+                    pictureAlert: false
                 }));
                 console.error(err)
             })
@@ -174,6 +179,13 @@ function App() {
         setUserLogin('');
         setLoggedIn(false);
         navigate('/sign-in');
+    }
+
+    function closeInfoTooltip() {
+        setDataMessage((oldDataMessage) => ({
+            ...oldDataMessage,
+            popupMessage: null
+        }));
     }
 
     return (
@@ -231,9 +243,9 @@ function App() {
                 >
                 </PopupWithForm>
 
-                <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+                <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-                <InfoTooltip loggedIn={loggedIn} dataMessage={dataMessage} />
+                <InfoTooltip dataMessage={dataMessage} closeInfoTooltip={closeInfoTooltip} />
 
             </CurrentUserContext.Provider>
         </div>
