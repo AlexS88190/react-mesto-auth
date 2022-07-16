@@ -15,7 +15,6 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import InfoTooltip from "./InfoTooltip.js";
 
-
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
@@ -38,23 +37,21 @@ function App() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        api.getCards()
-            .then(res => setCards(res))
-            .catch(error => console.log(error));
-
-        api.getUserInfo()
-            .then(res => setCurrentUser(res))
-            .catch(error => console.log(error));
-
-        tokenCheck();
-
-    }, [])
-
-    React.useEffect(() => {
         if (loggedIn) {
             navigate('/');
+            api.getCards()
+                .then(res => setCards(res))
+                .catch(error => console.log(error));
+
+            api.getUserInfo()
+                .then(res => setCurrentUser(res))
+                .catch(error => console.log(error));
         }
     }, [loggedIn])
+
+    React.useEffect(() => {
+        tokenCheck();
+    }, [])
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -159,7 +156,7 @@ function App() {
     }
 
     function tokenCheck() {
-        let jwt = localStorage.getItem('jwt');
+        const jwt = localStorage.getItem('jwt');
 
         if (jwt) {
             mestoAuth.getContent(jwt)

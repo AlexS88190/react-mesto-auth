@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from "./Header.js";
+import AuthForm from "./AuthForm.js";
 
 function Login({ handleLogin }) {
 
@@ -13,7 +13,9 @@ function Login({ handleLogin }) {
     const [mapSignInSignOut, setMapSignInSignOut] = React.useState(
         {
             titleInOut: 'Регистрация',
-            pathRedirect: '/sign-up'
+            pathRedirect: '/sign-up',
+            nameComponent: 'Вход',
+            buttonTitleSubmit: 'Войти'
         }
     );
 
@@ -37,18 +39,12 @@ function Login({ handleLogin }) {
     }
 
     return (
-        <>
-            <Header mapSignInSignOut={mapSignInSignOut} />
-            <div className="register">
-                <h1 className="register__title">Вход</h1>
-                <form className="register__form" onSubmit={handleSubmit}>
-                    <input name="email" className="register__input" value={data.email} onChange={handleChange}  placeholder="Email" type="email"/>
-                    <input name="password" className="register__input" value={data.password} onChange={handleChange} placeholder="Пароль" type="password"/>
-                    <button className="register__save-button" type="submit">Войти</button>
-                </form>
-           </div>
-        </>
-
+        <AuthForm
+            mapSignInSignOut={mapSignInSignOut}
+            handleSubmit={handleSubmit}
+            data={data}
+            handleChange={handleChange}
+        />
     )
 }
 
